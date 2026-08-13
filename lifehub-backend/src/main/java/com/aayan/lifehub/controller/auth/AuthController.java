@@ -1,6 +1,8 @@
 package com.aayan.lifehub.controller.auth;
 
 import com.aayan.lifehub.common.APIRoutes;
+import com.aayan.lifehub.dto.auth.LoginRequest;
+import com.aayan.lifehub.dto.auth.LoginResponse;
 import com.aayan.lifehub.dto.auth.RegisterRequest;
 import com.aayan.lifehub.dto.auth.RegisterResponse;
 import com.aayan.lifehub.service.auth.AuthService;
@@ -18,6 +20,16 @@ public class AuthController {
     public AuthController(AuthService authService){
         this.authService = authService;
     }
+
+    @PostMapping("/login")
+    public LoginResponse login(@RequestBody LoginRequest request){
+        return authService.login(request);
+    }
+
+//    @PostMapping("/logout")
+//    public LogoutResponse logout(@RequestBody LogoutRequest request){
+//        return authService.logout(request);
+//    }
 
     @PostMapping("/register")
     public RegisterResponse register(@RequestBody RegisterRequest request){

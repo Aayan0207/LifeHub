@@ -3,6 +3,8 @@ package com.aayan.lifehub.model.auth;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Optional;
+
 @Document(collection = "users")
 public class User {
     @Id
