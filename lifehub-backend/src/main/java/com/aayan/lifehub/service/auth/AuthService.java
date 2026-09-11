@@ -37,13 +37,7 @@ public class AuthService {
     }
 
     public void validateLoginRequest(LoginRequest request) {
-        if (request.getName().isEmpty()) {
-            throw new UsernameRequiredException();
-        }
-        //add email validation to check if valid email
-        if (request.getEmail().isEmpty()){
-            throw new EmailRequiredException();
-        }
+
     }
 
     public RegisterResponse register(RegisterRequest request) {
@@ -61,8 +55,8 @@ public class AuthService {
         if (!request.getPassword().equals(request.getConfirmPassword())) {
             throw new PasswordMismatchException();
         }
-        if (request.getName().isBlank()) {
-            throw new UsernameRequiredException();
+        if (userRepository.existsByEmail(request.getEmail())){
+            throw new EmailAlreadyExistsException();
         }
     }
 }
