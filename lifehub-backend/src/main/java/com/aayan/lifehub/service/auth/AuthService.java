@@ -54,7 +54,7 @@ public class AuthService {
                 request.getPassword()
         );
         User savedUser = userRepository.save(user);
-        return new RegisterResponse(savedUser.getId(), savedUser.getName(), savedUser.getEmail());
+        return new RegisterResponse(savedUser);
     }
 
     public void validateRegisterRequest(RegisterRequest request) {
