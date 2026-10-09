@@ -6,6 +6,7 @@ import com.aayan.lifehub.exception.auth.EmailAlreadyExistsException;
 import com.aayan.lifehub.exception.auth.IncorrectPasswordException;
 import com.aayan.lifehub.exception.auth.PasswordMismatchException;
 import com.aayan.lifehub.exception.auth.UserNotFoundException;
+import com.mongodb.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -15,8 +16,21 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.aayan.lifehub.common.ErrorMessages.EMAIL_ALREADY_TAKEN_EXCEPTION;
+
 @RestControllerAdvice
 public class GlobalExceptionHandler {
+
+    @ExceptionHandler(DuplicateKeyException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public HubErrorResponse handleDuplicateEmail(DuplicateKeyException exception) {
+        Map<String, String> errors = new HashMap<>();
+        String field = "email";
+        String message = EMAIL_ALREADY_TAKEN_EXCEPTION;
+        errors.put(field, message);
+        return new HubErrorResponse(errors);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public HubErrorResponse handleValidationError(MethodArgumentNotValidException exception) {
@@ -41,31 +55,31 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(EmailAlreadyExistsException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public HubErrorResponse handleEmailExistsError(EmailAlreadyExistsException exception){
-        Map<String,String> errors = new HashMap<>();
+    public HubErrorResponse handleEmailExistsError(EmailAlreadyExistsException exception) {
+        Map<String, String> errors = new HashMap<>();
         String field = exception.getField();
         String message = exception.getMessage();
-        errors.put(field,message);
+        errors.put(field, message);
         return new HubErrorResponse(errors);
     }
 
     @ExceptionHandler(UserNotFoundException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public HubErrorResponse handleUserNotFoundError(UserNotFoundException exception){
-        Map<String,String> errors = new HashMap<>();
+    public HubErrorResponse handleUserNotFoundError(UserNotFoundException exception) {
+        Map<String, String> errors = new HashMap<>();
         String field = exception.getField();
         String message = exception.getMessage();
-        errors.put(field,message);
+        errors.put(field, message);
         return new HubErrorResponse(errors);
     }
 
     @ExceptionHandler(IncorrectPasswordException.class)
     @ResponseStatus(HttpStatus.UNAUTHORIZED)
-    public HubErrorResponse handlePasswordError(IncorrectPasswordException exception){
-        Map<String,String> errors = new HashMap<>();
+    public HubErrorResponse handlePasswordError(IncorrectPasswordException exception) {
+        Map<String, String> errors = new HashMap<>();
         String field = exception.getField();
         String message = exception.getMessage();
-        errors.put(field,message);
+        errors.put(field, message);
         return new HubErrorResponse(errors);
     }
 }
